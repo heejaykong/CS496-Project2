@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Fragment1.AddActivity">
+
+    <androidx.cardview.widget.CardView
+        android:id = "@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="8dp"
+        app:contentPadding="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="48sp"
+            android:text="MT게임천국"
+            android:fontFamily="@font/dreamhouseb"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintBottom_toTopOf="@id/layout2">
+
+        <androidx.cardview.widget.CardView
+            android:id = "@+id/game1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:contentPadding="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/game2">
+
+            <TextView
+                android:id="@+id/game1_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="King's Cup"
+                android:fontFamily="@font/dreamhouseb"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id = "@+id/game2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:contentPadding="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/game2_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="라이어를 찾아라!"
+                android:fontFamily="@font/dreamhouseb"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id = "@+id/game3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:contentPadding="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/game2"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/game3_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="할리갈리"
+                android:fontFamily="@font/dreamhouseb"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/layout1">
+
+        <androidx.cardview.widget.CardView
+            android:id = "@+id/game4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:contentPadding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/game5">
+
+            <TextView
+                android:id="@+id/game4_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="룰렛"
+                android:fontFamily="@font/dreamhouseb"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id = "@+id/game5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:contentPadding="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/game5_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="마주치는 눈빛이"
+                android:fontFamily="@font/dreamhouseb"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id = "@+id/game6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:contentPadding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/game5"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/game6_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="추가예정"
+                android:fontFamily="@font/dreamhouseb"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/layout2">
+
+        <androidx.cardview.widget.CardView
+            android:id = "@+id/explain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:contentPadding="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/text_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:gravity="center_horizontal"
+                android:text="하고싶은 게임을 클릭!\n음주는 자유지만 책임은 못진다."
+                android:fontFamily="@font/dreamhouseb"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
