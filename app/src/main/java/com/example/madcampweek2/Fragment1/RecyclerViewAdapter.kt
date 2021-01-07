@@ -15,17 +15,13 @@ import kotlinx.android.synthetic.main.phonebook_item.view.*
 
 class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     var view : View = v
-
     fun bind(item: PhoneBookData) {
         view.name.text = item.name
     }
 }
 
-class PhoneBookListAdapter(val mContext: Context, val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
-    override fun getItemCount() : Int {
-        return itemList.size
-    }
-
+class PhoneBookListAdapter(private val mContext: Context, private val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
+    override fun getItemCount() = itemList.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneBookViewHolder {
         val inflatedView = LayoutInflater.from(parent.context).inflate(
             R.layout.phonebook_item,
@@ -36,33 +32,18 @@ class PhoneBookListAdapter(val mContext: Context, val itemList: List<PhoneBookDa
     }
 
     override fun onBindViewHolder(holder: PhoneBookViewHolder, position: Int) {
-
-        val ITEM_CODE = 1
+//        val ITEM_CODE = 1
         val item = itemList[position]
-        holder.apply {
-            bind(item)
-        }
 
         // call button click event
         holder.view.call_button.setOnClickListener{
-            var phoneNumber = "tel:"
-            phoneNumber += item.number?.get(0)
-            phoneNumber += item.number?.get(1)
-            phoneNumber += item.number?.get(2)
-            phoneNumber += "-"
-            phoneNumber += item.number?.get(3)
-            phoneNumber += item.number?.get(4)
-            phoneNumber += item.number?.get(5)
-            phoneNumber += item.number?.get(6)
-            phoneNumber += "-"
-            phoneNumber += item.number?.get(7)
-            phoneNumber += item.number?.get(8)
-            phoneNumber += item.number?.get(9)
-            phoneNumber += item.number?.get(10)
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(phoneNumber))
+            val uri = Uri.parse("tel:${item.number.toString()}")
+            val intent = Intent(Intent.ACTION_CALL, uri)
             mContext.startActivity(intent)
         }
-
+        holder.apply {
+            bind(item)
+        }
         // item click event
         holder.itemView.setOnClickListener{
 

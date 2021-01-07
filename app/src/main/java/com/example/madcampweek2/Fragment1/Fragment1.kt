@@ -2,6 +2,7 @@ package com.example.madcampweek2.Fragment1
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -12,11 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madcampweek2.*
 import kotlinx.android.synthetic.main.fragment_1.*
 
-/**
- * A simple [Fragment] subclass.
- * Use the [Fragment1.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Fragment1 : Fragment() {
     private var bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
 
@@ -25,23 +21,23 @@ class Fragment1 : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
-        val view : View = inflater.inflate(R.layout.fragment_1, container, false)
-
+        val view = inflater.inflate(R.layout.fragment_1, container, false)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         fab.setOnClickListener {
             // Change Activity.
             val intent = Intent(context, AddActivity::class.java)
             activity?.startActivityForResult(intent, 0)
         }
-
         phone_book_list.adapter = bookDataList?.let { it ->
-            context?.let { it1 -> PhoneBookListAdapter(it1, it) }}
+            context?.let { it1 ->
+                PhoneBookListAdapter(it1, it)
+            }
+        }
         phone_book_list.layoutManager = LinearLayoutManager(context)
 
         search_name.addTextChangedListener(object : TextWatcher {
@@ -66,12 +62,57 @@ class Fragment1 : Fragment() {
             override fun afterTextChanged(s: Editable) {}
         })
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         bookDataList = BookDataList.getInstance()
         phone_book_list.layoutManager = LinearLayoutManager(context)
         phone_book_list.adapter = bookDataList?.let { it ->
             context?.let { it1 -> PhoneBookListAdapter(it1, it) } }
+    }
+
+
+
+
+
+
+
+
+    fun getPhoneNumbers(sort:String, searchName:String?) : List<PhoneBookData> {
+        // 결과목록 미리 정의
+        val list = mutableListOf<PhoneBookData>()
+        // 1. 주소록 Uri - 여기서는 사용안함, 비교를 위해 작성
+        //val addressUri = ContactsContract.Contacts.CONTENT_URI
+        // 1. 전화번호 Uri
+        val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+        // 2.1 전화번호에서 가져올 컬럼 정의
+        val projections = arrayOf(ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+                , ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
+                , ContactsContract.CommonDataKinds.Phone.NUMBER)
+        // 2.2 조건 정의
+        var wheneClause:String? = null
+        var whereValues:Array<String>? = null
+        // searchName에 값이 있을 때만 검색을 사용한다
+        if(searchName?.isNotEmpty() ?: false) {
+            wheneClause = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " like ?"
+            whereValues = arrayOf("%$searchName%")
+        }
+        // 2.3 정렬쿼리 사용
+        val optionSort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " $sort"
+        // 3. 테이블에서 주소록 데이터 쿼리
+        context?.run{
+            val cursor = contentResolver.query(phoneUri, projections, wheneClause, whereValues, optionSort)
+            // 4. 반복문으로 아이디와 이름을 가져오면서 전화번호 조회 쿼리를 한번 더 돌린다.
+            while(cursor?.moveToNext()?:false) {
+                val id = cursor?.getString(0)
+                val name = cursor?.getString(1)
+                val number = cursor?.getString(2)
+                // 개별 전화번호 데이터 생성
+                val phone = PhoneBookData(name, number)
+                // 결과목록에 더하기
+                list.add(phone)
+            }
+        }
+        // 결과목록 반환
+        return list
     }
 }

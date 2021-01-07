@@ -25,6 +25,10 @@ import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
 
 class MainActivity : AppCompatActivity() {
+//    첫번째탭 관련 권한처리
+    private val READ_CONTACTS = Manifest.permission.READ_CONTACTS
+    private val CALL_PHONE = Manifest.permission.CALL_PHONE
+
     private val REQ_STORAGE_PERMISSION = 1
 
     var lastTimeBackPressed : Long = -1;
@@ -35,17 +39,17 @@ class MainActivity : AppCompatActivity() {
     val FRAG2_CODE : Int = 1
     val FRAG3_CODE : Int = 2
 
+    private val phonbook_permissions = arrayOf(READ_CONTACTS, CALL_PHONE)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        checkPhonebookPermissionAndStart()
 
         // 뷰페이저 설정
         val fragmentList = listOf(Fragment1(), Fragment2(), Fragment3())
         mAdapter.fragments = fragmentList
-
         //뷰페이저와 어댑터 연결
         view_pager.adapter = mAdapter
-
         // 탭레이아웃 관리
         TabLayoutMediator(tabs, view_pager) { tab: TabLayout.Tab, position: Int ->
             when (position) {
@@ -71,6 +75,15 @@ class MainActivity : AppCompatActivity() {
         }.attach()
 
         checkGalleryPermission(cancel = {showPermissionInfoDialog()}, ok = {})
+    }
+    private fun checkPhonebookPermissionAndStart() {
+        for(perm in phonbook_permissions) {
+            val result = ContextCompat.checkSelfPermission(this, perm)
+            if(result != PackageManager.PERMISSION_GRANTED) { //permission 하나라도 거부되면
+                ActivityCompat.requestPermissions(this, phonbook_permissions, 99)
+            }
+        }
+        setContentView(R.layout.activity_main)
     }
 
     /////////////////////////tab2
