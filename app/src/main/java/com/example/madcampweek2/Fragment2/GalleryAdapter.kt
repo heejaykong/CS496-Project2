@@ -3,7 +3,6 @@ package com.example.madcampweek2.Fragment2
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,9 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.madcampweek2.R
-import kotlinx.android.synthetic.main.grid_item.*
 
 class GalleryAdapter(val context: Context?, private val datasetList : MutableList<ImageData>, private val folderImageNum : MutableList<Int>) :
     RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>(){
@@ -63,7 +60,7 @@ class GalleryAdapter(val context: Context?, private val datasetList : MutableLis
             holder.bind(item)
             holder.itemView.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View?) {
-                    val intent = Intent(context, ImageActivity::class.java)
+                    val intent = Intent(context, FocusActivity::class.java)
                     val bundle = Bundle()
                     bundle.putString("uri", item.contentUri.toString())
                     intent.putExtras(bundle)    // intent 객체에 Bundle을 저장

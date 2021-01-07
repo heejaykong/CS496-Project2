@@ -90,9 +90,8 @@ class Fragment2 : Fragment() {
         ft.detach(fragment).attach(fragment).commit()
     }
 
+
     fun BitmapToUri(context: Context, bitmap: Bitmap): Uri {
-        var bytes =  ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100, bytes)
         val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
         return Uri.parse(path.toString())
     }
@@ -146,7 +145,6 @@ class Fragment2 : Fragment() {
         val cursor = context.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             projection,
-            //null,
             null,
             null,
             sortOrder

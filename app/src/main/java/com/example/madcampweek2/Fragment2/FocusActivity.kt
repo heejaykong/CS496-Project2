@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.madcampweek2.R
 import org.jetbrains.anko.toast
 
-public class ImageActivity : AppCompatActivity() {
+public class FocusActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState : Bundle?){
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.focus_image)
+        setContentView(R.layout.activity_focus)
         val intent = getIntent()
         val imageUri = intent.getStringExtra("uri")
         val imageView : ImageView = findViewById(R.id.imageView)
@@ -22,9 +22,6 @@ public class ImageActivity : AppCompatActivity() {
             toast("ERROR")
             finish()
         }
-        //btnBack.setOnClickListener{
-        //    finish()
-        //}
     }
     private fun setImage(imageView : ImageView, imageUri : String){
         Log.d("test", "URI: $imageUri")

@@ -30,13 +30,9 @@
         <activity android:name=".Fragment3.GameActivity1"
             android:theme="@style/Theme.AppCompat.Light" />
 
-        <activity android:name=".Fragment2.ImageActivity"
+        <activity android:name=".Fragment2.FocusActivity"
             android:theme="@style/Theme.AppCompat.Light"/>
 
-        <activity
-            android:name=".Fragment2.focus_image"
-            android:label="@string/title_activity_focus_image"
-            android:theme="@style/Theme.MadCampWeek2.NoActionBar" />
         <activity android:name=".Fragment1.ItemActivity"
             android:theme="@style/Theme.AppCompat.Light"/>
         <activity android:name=".Fragment1.EditActivity"
