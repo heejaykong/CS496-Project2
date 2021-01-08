@@ -47,9 +47,7 @@ class SplashScreen : AppCompatActivity() {
                         startActivity(Intent(this@SplashScreen, MainActivity::class.java))
                         finish()
                 }
-
                 override fun onCancel() {}
-
                 override fun onError(exception: FacebookException?) {
                     // App code
                     Toast.makeText(this@SplashScreen, "Error! Please try again!", Toast.LENGTH_LONG).show()
@@ -57,9 +55,9 @@ class SplashScreen : AppCompatActivity() {
             })
 
         button.setOnClickListener {
-            val url : String = address.text.toString()
-            val id : String = id.text.toString()
-            val password : String = password.text.toString()
+            val url: String = address.text.toString()
+            val id: String = id.text.toString()
+            val password: String = password.text.toString()
             loginVolley(this, url, id, password)
         }
     }
@@ -88,14 +86,11 @@ class SplashScreen : AppCompatActivity() {
 
     private fun loginVolley(context: Context, url: String, userid: String, password: String) {
         // https://developer.android.com/training/volley/simple GET 방법
-
         // 1. RequestQueue 생성 및 초기화
         val requestQueue = Volley.newRequestQueue(context)
-
         // 2. Request Obejct인 StringRequest 생성
         val request: StringRequest = object : StringRequest(Method.POST, url,
             Response.Listener { response ->
-                response
                 button.text = response.toString()
                 showJSONList(response)
             },
@@ -118,7 +113,6 @@ class SplashScreen : AppCompatActivity() {
         // 3) 생성한 StringRequest를 RequestQueue에 추가
         requestQueue.add(request)
     }
-
     fun showJSONList(response: String) {
         try {
             response.let {
@@ -166,7 +160,6 @@ class SplashScreen : AppCompatActivity() {
             }
             return phoneNumber
         }
-
         fun showAlert(title: String, message: String) {
             val builder = context?.let {
                 AlertDialog.Builder(it)
