@@ -7,22 +7,15 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.provider.Settings
 import android.telephony.PhoneNumberUtils
 import android.telephony.TelephonyManager
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.android.volley.DefaultRetryPolicy
-import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.VolleyError
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.activity_splash_screen.*
@@ -37,18 +30,6 @@ class SplashScreen : AppCompatActivity() {
         setContentView(R.layout.activity_splash_screen)
 
         button.setOnClickListener {
-//            if (true) {
-//                val intent = Intent(this, MainActivity::class.java)
-//                startActivity(intent)
-//                finish()
-//            }
-//            VolleyService.testVolley(this) {testSuccess ->
-//                if (testSuccess) {
-//                    Toast.makeText(this, "통신 성공!", Toast.LENGTH_LONG).show()
-//                } else {
-//                    Toast.makeText(this, "통신 실패!", Toast.LENGTH_LONG).show()
-//                }
-//            }
             val url : String = address.text.toString()
             val id : String = id.text.toString()
             val password : String = password.text.toString()
@@ -108,6 +89,7 @@ class SplashScreen : AppCompatActivity() {
             response.let {
                 if(response.equals("success")){
                     startActivity(Intent(this,MainActivity::class.java))
+                    finish()
                 }
                 else {
                     Toast.makeText(this, "로그인실패! 정확히 입력해주세요.", Toast.LENGTH_LONG).show()
