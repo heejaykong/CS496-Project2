@@ -24,42 +24,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.MadCampWeek2">
-        <activity android:name=".SplashScreen"
-            android:theme="@style/Theme.AppCompat.Light" >
+        android:theme="@style/Theme.madcampweek2">
+        <activity android:name=".SplashScreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Fragment3.LierActivity"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:name=".Fragment3.LierActivity" />
         <activity
-            android:name=".Fragment3.GameActivity4"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:name=".Fragment3.GameActivity4" />
         <activity
-            android:name=".Fragment3.GameActivity2"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:name=".Fragment3.GameActivity2" />
         <activity
-            android:name=".Fragment3.GameActivity1"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:name=".Fragment3.GameActivity1" />
         <activity
-            android:name=".Fragment2.FocusActivity"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:name=".Fragment2.FocusActivity" />
         <activity
-            android:name=".Fragment1.ItemActivity"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:name=".Fragment1.ItemActivity" />
         <activity
-            android:name=".Fragment1.EditActivity"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:name=".Fragment1.EditActivity" />
         <activity
             android:name=".Fragment1.AddActivity"
-            android:theme="@style/Theme.AppCompat.Light"
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
