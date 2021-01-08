@@ -29,9 +29,18 @@ class Fragment1 : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fab.setOnClickListener {
-            // Change Activity.
-            val intent = Intent(context, AddActivity::class.java)
-            activity?.startActivityForResult(intent, 0)
+            if (bookDataList!!.isEmpty()) {
+                getPhoneNumbers()
+                phone_book_list.adapter = bookDataList?.let { it ->
+                    context?.let { it1 ->
+                        PhoneBookListAdapter(it1, it)
+                    }
+                }
+            } else {
+                // Change Activity.
+                val intent = Intent(context, AddActivity::class.java)
+                activity?.startActivityForResult(intent, 0)
+            }
         }
         phone_book_list.adapter = bookDataList?.let { it ->
             context?.let { it1 ->
@@ -77,9 +86,9 @@ class Fragment1 : Fragment() {
 
 
 
-    fun getPhoneNumbers(sort:String, searchName:String?) : List<PhoneBookData> {
+    fun getPhoneNumbers(){
         // 결과목록 미리 정의
-        val list = mutableListOf<PhoneBookData>()
+        val list = BookDataList.getInstance()
         // 1. 주소록 Uri - 여기서는 사용안함, 비교를 위해 작성
         //val addressUri = ContactsContract.Contacts.CONTENT_URI
         // 1. 전화번호 Uri
@@ -91,13 +100,8 @@ class Fragment1 : Fragment() {
         // 2.2 조건 정의
         var wheneClause:String? = null
         var whereValues:Array<String>? = null
-        // searchName에 값이 있을 때만 검색을 사용한다
-        if(searchName?.isNotEmpty() ?: false) {
-            wheneClause = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " like ?"
-            whereValues = arrayOf("%$searchName%")
-        }
-        // 2.3 정렬쿼리 사용
-        val optionSort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " $sort"
+
+        val optionSort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " asc"
         // 3. 테이블에서 주소록 데이터 쿼리
         context?.run{
             val cursor = contentResolver.query(phoneUri, projections, wheneClause, whereValues, optionSort)
@@ -109,10 +113,8 @@ class Fragment1 : Fragment() {
                 // 개별 전화번호 데이터 생성
                 val phone = PhoneBookData(name, number)
                 // 결과목록에 더하기
-                list.add(phone)
+                list?.add(phone)
             }
         }
-        // 결과목록 반환
-        return list
     }
 }
