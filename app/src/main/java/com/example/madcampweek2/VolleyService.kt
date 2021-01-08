@@ -1,9 +1,13 @@
 package com.example.madcampweek2
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
+import androidx.core.content.ContextCompat.startActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONException
 import org.json.JSONObject
 
 object VolleyService {
@@ -14,7 +18,7 @@ object VolleyService {
         val myJson = JSONObject()
         val requestBody = myJson.toString()
 
-        val testRequest = object : StringRequest(Method.GET, testUrl, Response.Listener {response ->
+        val testRequest = object : StringRequest(Method.POST, testUrl, Response.Listener {response ->
             success(true)
         }, Response.ErrorListener { error ->
             success(false)
