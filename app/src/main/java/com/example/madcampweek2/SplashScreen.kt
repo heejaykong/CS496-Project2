@@ -26,7 +26,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
-
 class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +72,7 @@ class SplashScreen : AppCompatActivity() {
                 val params: MutableMap<String,String> = HashMap()
                 params["userid"] = userid
                 params["password"] = password
-                params["mobileNO"] = getPhoneNumber() // 로그인하는 휴대폰번호 정보
+//                params["mobileNO"] = getPhoneNumber() // 로그인하는 휴대폰번호 정보
                 params["uID"] = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
                 return params
             }
@@ -97,50 +96,48 @@ class SplashScreen : AppCompatActivity() {
         }
     }
 
-    companion object {
-        var context: Context? = null
-
-        @SuppressLint("MissingPermission") // TED퍼미션을 미리 설정했다는 가정하에
-        fun getPhoneNumber(): String {
-            var phoneNumber = ""
-            try {
-                val telephony = context?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                if (telephony.line1Number != null) {
-                    phoneNumber = telephony.line1Number
-                } else {
-                    if (telephony.simSerialNumber != null) {
-                        phoneNumber = telephony.simSerialNumber
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            if (phoneNumber.startsWith("+82")) {
-                phoneNumber = phoneNumber.replace("+82", "0")
-            }
-            phoneNumber = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                PhoneNumberUtils.formatNumber(
-                    phoneNumber,
-                    Locale.getDefault().country
-                )
-            } else {
-                PhoneNumberUtils.formatNumber(phoneNumber)
-            }
-            return phoneNumber
-        }
-
-        fun showAlert(title: String, message: String) {
-            val builder = context?.let {
-                AlertDialog.Builder(it)
-                    .setTitle(title)
-                    .setMessage(message)
-                    .setCancelable(false)
-                    .setPositiveButton("OK") { dialog, id -> dialog.dismiss() }
-            }
-            val alert = builder!!.create()
-            alert.show()
-        }
-    }
+//    companion object {
+//        var context: Context? = null
+//
+//        @SuppressLint("MissingPermission") // TED퍼미션을 미리 설정했다는 가정하에
+//        fun getPhoneNumber(): String {
+//            var phoneNumber = ""
+//            try {
+//                val telephony = context?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+//                if (telephony.line1Number != null) {
+//                    phoneNumber = telephony.line1Number
+//                } else {
+//                    if (telephony.simSerialNumber != null) {
+//                        phoneNumber = telephony.simSerialNumber
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//            if (phoneNumber.startsWith("+82")) {
+//                phoneNumber = phoneNumber.replace("+82", "0")
+//            }
+//            phoneNumber = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                PhoneNumberUtils.formatNumber(
+//                    phoneNumber,
+//                    Locale.getDefault().country
+//                )
+//            } else {
+//                PhoneNumberUtils.formatNumber(phoneNumber)
+//            }
+//            return phoneNumber
+//        }
+//
+//        fun showAlert(title: String, message: String) {
+//            val builder = context?.let {
+//                AlertDialog.Builder(it)
+//                    .setTitle(title)
+//                    .setMessage(message)
+//                    .setCancelable(false)
+//                    .setPositiveButton("OK") { dialog, id -> dialog.dismiss() }
+//            }
+//            val alert = builder!!.create()
+//            alert.show()
+//        }
+//    }
 }
-
-

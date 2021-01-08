@@ -11,7 +11,6 @@ import org.json.JSONException
 import org.json.JSONObject
 
 object VolleyService {
-
     val testUrl = "http://192.249.18.208:3000/"
 
     fun testVolley(context: Context, success: (Boolean) -> Unit) {
@@ -32,6 +31,4 @@ object VolleyService {
         }
         Volley.newRequestQueue(context).add(testRequest)
     }
-}:wq::::wq
-:qwqwq
-
+}
