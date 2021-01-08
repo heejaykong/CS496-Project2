@@ -18,16 +18,44 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import org.json.JSONException
-import org.json.JSONObject
 import java.util.*
 
 
 class SplashScreen : AppCompatActivity() {
+
+    val callbackManager = CallbackManager.Factory.create()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
+
+        FacebookSdk.sdkInitialize(applicationContext)
+        AppEventsLogger.activateApp(this)
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+            object : FacebookCallback<LoginResult?> {
+                override fun onSuccess(loginResult: LoginResult?) {
+                    // App code
+                        startActivity(Intent(this@SplashScreen, MainActivity::class.java))
+                        finish()
+                }
+
+                override fun onCancel() {}
+
+                override fun onError(exception: FacebookException?) {
+                    // App code
+                    Toast.makeText(this@SplashScreen, "Error! Please try again!", Toast.LENGTH_LONG).show()
+                }
+            })
 
         button.setOnClickListener {
             val url : String = address.text.toString()
@@ -35,6 +63,11 @@ class SplashScreen : AppCompatActivity() {
             val password : String = password.text.toString()
             loginVolley(this, url, id, password)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -72,11 +105,14 @@ class SplashScreen : AppCompatActivity() {
             }
         ) {
             override fun getParams(): Map<String, String> {
-                val params: MutableMap<String,String> = HashMap()
+                val params: MutableMap<String, String> = HashMap()
                 params["userid"] = userid
                 params["password"] = password
                 params["mobileNO"] = getPhoneNumber() // 로그인하는 휴대폰번호 정보
-                params["uID"] = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+                params["uID"] = Settings.Secure.getString(
+                    contentResolver,
+                    Settings.Secure.ANDROID_ID
+                )
                 return params
             }
         }
@@ -88,7 +124,7 @@ class SplashScreen : AppCompatActivity() {
         try {
             response.let {
                 if(response.equals("success")){
-                    startActivity(Intent(this,MainActivity::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
                 else {
