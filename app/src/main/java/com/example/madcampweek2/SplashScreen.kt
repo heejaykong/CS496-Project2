@@ -18,15 +18,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.FacebookSdk
+import com.facebook.*
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import org.json.JSONException
+import java.net.InetAddress
+import java.net.NetworkInterface
 import java.util.*
 
 class SplashScreen : AppCompatActivity() {
@@ -37,22 +36,36 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
+//        val ip : String = function()
+
+
+
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(this)
 
-        LoginManager.getInstance().registerCallback(callbackManager,
-            object : FacebookCallback<LoginResult?> {
-                override fun onSuccess(loginResult: LoginResult?) {
-                    // App code
+        val accessToken = AccessToken.getCurrentAccessToken();
+
+        if (accessToken != null) {
+            startActivity(Intent(this@SplashScreen, MainActivity::class.java))
+            finish()
+        } else {
+            LoginManager.getInstance().registerCallback(callbackManager,
+                object : FacebookCallback<LoginResult?> {
+                    override fun onSuccess(loginResult: LoginResult?) {
+                        // App code
                         startActivity(Intent(this@SplashScreen, MainActivity::class.java))
                         finish()
-                }
-                override fun onCancel() {}
-                override fun onError(exception: FacebookException?) {
-                    // App code
-                    Toast.makeText(this@SplashScreen, "Error! Please try again!", Toast.LENGTH_LONG).show()
-                }
-            })
+
+                    }
+
+                    override fun onCancel() {}
+
+                    override fun onError(exception: FacebookException?) {
+                        // App code
+                        Toast.makeText(this@SplashScreen, "Error! Please try again!", Toast.LENGTH_LONG).show()
+                    }
+                })
+        }
 
         button.setOnClickListener {
             val url: String = address.text.toString()
@@ -76,7 +89,7 @@ class SplashScreen : AppCompatActivity() {
             val y = ev.y.toInt()
             if (!rect.contains(x, y)) {
                 val imm: InputMethodManager =
-                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(focusView.getWindowToken(), 0)
                 focusView.clearFocus()
             }
