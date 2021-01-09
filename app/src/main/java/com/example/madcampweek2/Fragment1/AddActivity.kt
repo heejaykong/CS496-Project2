@@ -15,6 +15,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.madcampweek2.R
+import com.example.madcampweek2.VolleyService
 import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.activity_add.image
 import kotlinx.android.synthetic.main.activity_edit.*
@@ -48,6 +49,7 @@ class AddActivity : AppCompatActivity() {
             val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
             if (name != "" && number !="" && name != null && number != null) {
                 val data: PhoneBookData = PhoneBookData(uri, name, number)
+                VolleyService.postContactVolley(this, data)
                 bookDataList?.add(data)
                 Collections.sort(bookDataList)
                 setResult(ADD_CODE)
