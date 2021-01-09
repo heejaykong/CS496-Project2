@@ -8,14 +8,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.madcampweek2.R
 import kotlinx.android.synthetic.main.phonebook_item.view.*
+import org.jetbrains.anko.backgroundColor
 
 class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     var view : View = v
     fun bind(item: PhoneBookData) {
+
+        // image binding
+        val image = view.findViewById<ImageView>(R.id.image)
+        val uri = item.photoURI
+        if (uri != null) {
+            Glide.with(image).load(uri).circleCrop().into(image)
+        } else {
+            Glide.with(image).load(R.drawable.user).circleCrop().into(image)
+        }
+        // name binding
         view.name.text = item.name
     }
 }
@@ -50,14 +63,11 @@ class PhoneBookListAdapter(private val mContext: Context, private val itemList: 
             // Set context, intent.
             val intent = Intent(mContext, ItemActivity::class.java)
 
-            // Set variables for bundle
-            val name = item.name
-            val number = item.number
-
             // Bundle을 통해서 전달
             val bundle = Bundle()
-            bundle.putString("name", name)
-            bundle.putString("number", number)
+            bundle.putString("photoURI", item.photoURI)
+            bundle.putString("name", item.name)
+            bundle.putString("number", item.number)
             bundle.putInt("position", position)
 
             intent.putExtras(bundle)    // intent 객체에 Bundle을 저장

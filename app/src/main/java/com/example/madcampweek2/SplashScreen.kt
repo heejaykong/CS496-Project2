@@ -37,21 +37,36 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
-//        val ip : String = function()
-
-
-
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(this)
 
-        val accessToken = AccessToken.getCurrentAccessToken();
+        val accessToken = AccessToken.getCurrentAccessToken()
+
+        val accessTokenTracker : AccessTokenTracker = object : AccessTokenTracker() {
+            override fun onCurrentAccessTokenChanged(oldAccessToken : AccessToken,
+                currentAccessToken : AccessToken) {
+                if (currentAccessToken == null) {
+                    //write your code here what to do when user logout
+                    continue_button.visibility = View.INVISIBLE
+                }
+            }
+        }
 
         if (accessToken != null) {
-            startActivity(Intent(this@SplashScreen, MainActivity::class.java))
-            finish()
+            continue_button.visibility = View.VISIBLE
+            continue_button.setOnClickListener {
+                // App code
+                if (accessToken != null) {
+                    startActivity(Intent(this@SplashScreen, MainActivity::class.java))
+                    finish()
+                }
+            }
+
         } else {
             LoginManager.getInstance().registerCallback(callbackManager,
                 object : FacebookCallback<LoginResult?> {
+
+
                     override fun onSuccess(loginResult: LoginResult?) {
                         // App code
                         startActivity(Intent(this@SplashScreen, MainActivity::class.java))
@@ -62,9 +77,14 @@ class SplashScreen : AppCompatActivity() {
 
                     override fun onError(exception: FacebookException?) {
                         // App code
-                        Toast.makeText(this@SplashScreen, "Error! Please try again!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this@SplashScreen,
+                            "Error! Please try aga in!",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 })
+
         }
 
         button.setOnClickListener {
@@ -79,6 +99,7 @@ class SplashScreen : AppCompatActivity() {
         callbackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
     }
+
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         val focusView: View? = currentFocus

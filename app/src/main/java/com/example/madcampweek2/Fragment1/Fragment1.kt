@@ -79,22 +79,13 @@ class Fragment1 : Fragment() {
             context?.let { it1 -> PhoneBookListAdapter(it1, it) } }
     }
 
-
-
-
-
-
-
-
     fun getPhoneNumbers(){
         // 결과목록 미리 정의
         val list = BookDataList.getInstance()
-        // 1. 주소록 Uri - 여기서는 사용안함, 비교를 위해 작성
-        //val addressUri = ContactsContract.Contacts.CONTENT_URI
         // 1. 전화번호 Uri
         val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         // 2.1 전화번호에서 가져올 컬럼 정의
-        val projections = arrayOf(ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+        val projections = arrayOf(ContactsContract.CommonDataKinds.Photo.PHOTO_URI
                 , ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
                 , ContactsContract.CommonDataKinds.Phone.NUMBER)
         // 2.2 조건 정의
@@ -107,12 +98,13 @@ class Fragment1 : Fragment() {
             val cursor = contentResolver.query(phoneUri, projections, wheneClause, whereValues, optionSort)
             // 4. 반복문으로 아이디와 이름을 가져오면서 전화번호 조회 쿼리를 한번 더 돌린다.
             while(cursor?.moveToNext()?:false) {
-                val id = cursor?.getString(0)
+                val photoURI = cursor?.getString(0)
                 val name = cursor?.getString(1)
                 val number = cursor?.getString(2)
                 // 개별 전화번호 데이터 생성
-                val phone = PhoneBookData(name, number)
+                val phone = PhoneBookData(photoURI, name, number)
                 // 결과목록에 더하기
+
                 list?.add(phone)
             }
         }
