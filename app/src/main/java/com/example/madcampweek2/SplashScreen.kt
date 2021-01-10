@@ -136,7 +136,7 @@ class SplashScreen : AppCompatActivity() {
                 val params: MutableMap<String, String> = HashMap()
                 params["userid"] = userid
                 params["password"] = password
-                params["mobileNO"] = getPhoneNumber() // 로그인하는 휴대폰번호 정보
+//                params["mobileNO"] = getPhoneNumber() // 로그인하는 휴대폰번호 정보
                 params["uID"] = Settings.Secure.getString(
                     contentResolver,
                     Settings.Secure.ANDROID_ID
