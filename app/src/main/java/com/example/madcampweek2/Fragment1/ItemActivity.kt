@@ -4,7 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.example.madcampweek2.R
 import kotlinx.android.synthetic.main.activity_item.*
 import java.util.ArrayList
@@ -23,29 +25,24 @@ class ItemActivity : AppCompatActivity() {
 
         // AddActivity의 intent를 받아 저장.
         val intent = getIntent()
+        val uri = intent.getStringExtra("photoURI")
         val name = intent.getStringExtra("name")
         val number = intent.getStringExtra("number")
         position = intent.getIntExtra("position", 0)
 
+        // hold
+        if (uri != null) {
+            val image = this.findViewById<ImageView>(R.id.image)
+            Glide.with(image).load(uri).circleCrop().into(image)
+        } else {
+            Glide.with(image).load(R.drawable.user).circleCrop().into(image)
+        }
         text_name.text = name
         text_number.text = number
 
         call_button.setOnClickListener{
-            var phoneNumber = "tel:"
-            phoneNumber += number?.get(0)
-            phoneNumber += number?.get(1)
-            phoneNumber += number?.get(2)
-            phoneNumber += "-"
-            phoneNumber += number?.get(3)
-            phoneNumber += number?.get(4)
-            phoneNumber += number?.get(5)
-            phoneNumber += number?.get(6)
-            phoneNumber += "-"
-            phoneNumber += number?.get(7)
-            phoneNumber += number?.get(8)
-            phoneNumber += number?.get(9)
-            phoneNumber += number?.get(10)
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(phoneNumber))
+            val uri = Uri.parse("tel:${number.toString()}")
+            val intent = Intent(Intent.ACTION_CALL, uri)
             startActivity(intent)
         }
 
@@ -57,6 +54,7 @@ class ItemActivity : AppCompatActivity() {
 
             // bundle 객체 생성, contents 저장
             val bundle = Bundle()
+            bundle.putString("photoURI", uri)
             bundle.putString("name", name)
             bundle.putString("number", number)
             bundle.putInt("position", position)
@@ -83,6 +81,13 @@ class ItemActivity : AppCompatActivity() {
             Toast.makeText(this, "이름과 번호를 정확히 입력해주세요!", Toast.LENGTH_LONG).show()
         } else {
             val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
+
+            if (bookDataList?.get(resultCode)!!.photoURI != null) {
+                val image = this.findViewById<ImageView>(R.id.image)
+                Glide.with(image).load(bookDataList?.get(resultCode)!!.photoURI).circleCrop().into(image)
+            } else {
+                Glide.with(image).load(R.drawable.user).circleCrop().into(image)
+            }
             text_name.text = bookDataList?.get(resultCode)!!.name
             text_number.text = bookDataList?.get(resultCode).number
         }

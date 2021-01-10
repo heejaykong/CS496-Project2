@@ -4,15 +4,18 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class PhoneBookData(
+    val photoURI : String?,
     val name: String?,
     val number: String?
 ) : Parcelable, Comparable<PhoneBookData> {
     constructor(source: Parcel) : this(
         source.readString(),
+        source.readString(),
         source.readString()
     )
     override fun describeContents() = 0
     override fun writeToParcel(dest: Parcel?, flags: Int): Unit = with(dest) {
+        this?.writeString(photoURI)
         this?.writeString(name)
         this?.writeString(number)
     }

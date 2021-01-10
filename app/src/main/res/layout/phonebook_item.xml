@@ -20,24 +20,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <ImageView
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/image"
-                android:scaleType="fitXY"
                 android:layout_width="30sp"
                 android:layout_height="30sp"
                 android:layout_margin="1dp"
-                android:layout_gravity="left"
-                android:layout_weight="0"
-                app:srcCompat="@drawable/user"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:tint="@color/purple_200" />
+                app:layout_constraintLeft_toLeftOf="parent"/>
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:textSize="24sp"
-                android:textColor="@color/purple_200"
                 android:layout_weight="1"
                 android:text="Name" />
 
