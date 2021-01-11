@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.madcampweek2.R
-import com.example.madcampweek2.SplashScreen.Companion.context
 import com.example.madcampweek2.VolleyService
 import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.activity_edit.*
@@ -24,7 +23,7 @@ import kotlin.collections.ArrayList
 class EditActivity : AppCompatActivity() {
 
     private val OPEN_GALLERY = 1
-    private var uri : String? = null
+    private var url : String? = null
     private var position = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,15 +35,15 @@ class EditActivity : AppCompatActivity() {
         var id = inIntent.getStringExtra("id")
         var name = inIntent.getStringExtra("name")
         var number = inIntent.getStringExtra("number")
-        uri = inIntent.getStringExtra("photoURI")
+        url = inIntent.getStringExtra("url")
         position = inIntent.getIntExtra("position", 0)
 
         // set initial view
         edit_name.setText(name)
         edit_number.setText(number)
-        if (uri != null) {
+        if (url != null) {
             val image = this.findViewById<ImageView>(R.id.image)
-            Glide.with(image).load(uri).circleCrop().into(image)
+            Glide.with(image).load(url).circleCrop().into(image)
         } else {
             Glide.with(image).load(R.drawable.plus).circleCrop().into(image)
         }
@@ -69,7 +68,7 @@ class EditActivity : AppCompatActivity() {
             // PhoneBookDataList에 추가
             val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
             if (name != "" && number !="" && name != null && number != null) {
-                val data: PhoneBookData = PhoneBookData(id, uri, name, number)
+                val data: PhoneBookData = PhoneBookData(id, url, name, number)
                 bookDataList?.set(position, data)
                 Collections.sort(bookDataList)
                 bookDataList?.forEachIndexed{ index, phoneBookData ->
@@ -107,10 +106,10 @@ class EditActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == OPEN_GALLERY) {
-                uri = data?.data.toString()
-                if (uri != null) {
+                url = data?.data.toString()
+                if (url != null) {
                     val image = this.findViewById<ImageView>(R.id.image)
-                    Glide.with(image).load(uri).circleCrop().into(image)
+                    Glide.with(image).load(url).circleCrop().into(image)
                 } else {
                     Glide.with(image).load(R.drawable.plus).circleCrop().into(image)
                 }

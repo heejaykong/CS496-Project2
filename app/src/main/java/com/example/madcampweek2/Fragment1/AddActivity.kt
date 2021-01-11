@@ -3,6 +3,7 @@ package com.example.madcampweek2.Fragment1
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -10,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.example.madcampweek2.MainActivity
 import com.example.madcampweek2.R
@@ -17,6 +19,7 @@ import com.example.madcampweek2.RetroFit.ApiService
 import com.example.madcampweek2.RetroFit.RetrofitClient
 import kotlinx.android.synthetic.main.activity_add.*
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,25 +52,30 @@ class AddActivity : AppCompatActivity() {
             // PhoneBookDataList에 추가
             val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
             if (name != "" && number !="" && name != null && number != null) {
-                val data: PhoneBookData = PhoneBookData(null, uri, name, number)
 
-                //send item
-                val contactPostReq: Call<ResponseBody?>? = apiService.contactsPost(name, number)
+                // 서버에 연락처 정보 전송
+                val contactPostReq = RetrofitClient.instance.apiService.contactsPost(
+                    name,
+                    number,
+                    RetrofitClient.instance.uriToByteArrayBody(this, uri?.toUri())
+                )
                 contactPostReq?.enqueue(object : Callback<ResponseBody?> {
                     override fun onResponse(
                         call: Call<ResponseBody?>?,
                         response: Response<ResponseBody?>
                     ) {
-                        data.id = response.toString()
+                        val test = response.body()!!.string()
+                        val test_ = JSONObject(test).getString("_id")
+                        val url = JSONObject(test).getString("url")
+                        val item : PhoneBookData = PhoneBookData(test_, url, name, number)
+                        bookDataList?.add(item)
+                        Collections.sort(bookDataList)
                         Toast.makeText(this@AddActivity, "전송 성공", Toast.LENGTH_LONG).show()
                     }
-                    override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
+                    override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
                         Toast.makeText(this@AddActivity, "전송 실패", Toast.LENGTH_LONG).show()
                     }
                 })
-
-                bookDataList?.add(data)
-                Collections.sort(bookDataList)
                 setResult(ADD_CODE)
             }else {
                 setResult(ADD_FAIL)

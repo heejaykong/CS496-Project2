@@ -12,17 +12,24 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.madcampweek2.Fragment1.BookDataList
 import com.example.madcampweek2.Fragment1.Fragment1
+import com.example.madcampweek2.Fragment1.PhoneBookData
 import com.example.madcampweek2.Fragment2.Fragment2
 import com.example.madcampweek2.Fragment3.Fragment3
+import com.example.madcampweek2.RetroFit.RetrofitClient
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_splash_screen.*
+import okhttp3.ResponseBody
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
+import org.json.JSONArray
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 //    첫번째탭 관련 권한처리
@@ -47,8 +54,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         checkPhonebookPermissionAndStart()
 
+        // DB에서 연락처 받아오기
+//        val contactGetReq = RetrofitClient.instance.apiService.contactsGetAll()
+//        contactGetReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
+//            override fun onResponse(
+//                call: retrofit2.Call<ResponseBody?>?,
+//                response: retrofit2.Response<ResponseBody?>
+//            ) {
+//                val test = response.body()!!.string()
+//                addContactsList(test)
+//                Toast.makeText(this@MainActivity, "전송 성공", Toast.LENGTH_LONG).show()
+//
+//            }
+//            override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
+//                Toast.makeText(this@MainActivity, "전송 실패", Toast.LENGTH_LONG).show()
+//            }
+//        })
+
         // 뷰페이저 설정
-        val fragmentList = listOf(Fragment1(), Fragment2(), Fragment3())
+        val fragmentList = listOf(Fragment1(), Fragment3(), Fragment2())
         mAdapter.fragments = fragmentList
         //뷰페이저와 어댑터 연결
         view_pager.adapter = mAdapter
@@ -60,13 +84,12 @@ class MainActivity : AppCompatActivity() {
                     tab.setIcon(R.drawable.contactbook)
                 }
                 1 -> {
+                    tab.text = "MEOW"
+                    tab.setIcon(R.drawable.pawprints)
+                }
+                2 -> {
                     tab.text = "Gallery"
                     tab.setIcon(R.drawable.gallery)
-                }
-
-                2 -> {
-                    tab.text = "MEOW"
-                    tab.setIcon(R.drawable.paw)
                 }
                 else -> {
                     tab.text = "Phone Book"
@@ -78,6 +101,18 @@ class MainActivity : AppCompatActivity() {
 
         checkGalleryPermission(cancel = {showPermissionInfoDialog()}, ok = {})
     }
+
+    private fun addContactsList(response : String) {
+        val array = JSONArray(response)
+        for (i in 0 until array.length()) {
+            val jresponse : JSONObject = array.getJSONObject(i)
+            val item = PhoneBookData(jresponse.getString("_id"), jresponse.getString("url"),
+                jresponse.getString("name"), jresponse.getString("phoneNum"))
+            val bookDataList = BookDataList.getInstance()
+            bookDataList!!.add(item)
+        }
+    }
+
     private fun checkPhonebookPermissionAndStart() {
         for(perm in phonbook_permissions) {
             val result = ContextCompat.checkSelfPermission(this, perm)

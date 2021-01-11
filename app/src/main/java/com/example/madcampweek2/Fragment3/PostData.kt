@@ -5,7 +5,7 @@ import android.os.Parcelable
 
 class PostData(
     var id : String?,
-    val photoURI : String?,
+    val url : String?,
     val name: String?,
     val number: String?
 ) : Parcelable, Comparable<PostData> {
@@ -18,7 +18,7 @@ class PostData(
     override fun describeContents() = 0
     override fun writeToParcel(dest: Parcel?, flags: Int): Unit = with(dest) {
         this?.writeString(id)
-        this?.writeString(photoURI)
+        this?.writeString(url)
         this?.writeString(name)
         this?.writeString(number)
     }

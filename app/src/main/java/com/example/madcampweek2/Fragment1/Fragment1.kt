@@ -11,11 +11,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.madcampweek2.*
+import com.example.madcampweek2.RetroFit.RetrofitClient
+import kotlinx.android.synthetic.main.activity_splash_screen.*
 import kotlinx.android.synthetic.main.fragment_1.*
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 class Fragment1 : Fragment() {
     private var bookDataList: ArrayList<PhoneBookData>? = BookDataList.getInstance()
@@ -47,10 +55,6 @@ class Fragment1 : Fragment() {
             }
         }
 
-        // 초기 연락처 load
-//        if (bookDataList!!.isEmpty()) {
-//            VolleyService.getContactVolley(context as Activity)
-//        }
         bookDataList = BookDataList.getInstance()
         phone_book_list.adapter = bookDataList?.let { it ->
             context?.let { it1 ->
@@ -94,8 +98,6 @@ class Fragment1 : Fragment() {
     }
 
     fun getPhoneNumbers(){
-        // 결과목록 미리 정의
-        val list = BookDataList.getInstance()
         // 1. 전화번호 Uri
         val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         // 2.1 전화번호에서 가져올 컬럼 정의
@@ -115,11 +117,33 @@ class Fragment1 : Fragment() {
                 val photoURI = cursor?.getString(0)
                 val name = cursor?.getString(1)
                 val number = cursor?.getString(2)
-                // 개별 전화번호 데이터 생성
-                val phone = PhoneBookData(null ,photoURI, name, number)
-                // 결과목록에 더하기
-                list?.add(phone)
+
+                bookDataList?.add(PhoneBookData(null, photoURI, name, number))
+
+//                // 서버에 연락처 정보 전송
+//                val contactPostReq = RetrofitClient.instance.apiService.contactsPost(
+//                    name,
+//                    number,
+//                    RetrofitClient.instance.uriToByteArrayBody(requireContext(), photoURI?.toUri())
+//                )
+//                contactPostReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
+//                    override fun onResponse(
+//                        call: retrofit2.Call<ResponseBody?>?,
+//                        response: retrofit2.Response<ResponseBody?>
+//                    ) {
+//                        val test = response.body()!!.string()
+//                        val test_ = JSONObject(test).getString("_id")
+//                        val url = JSONObject(test).getString("url")
+//                        val item : PhoneBookData = PhoneBookData(test_, url, name, number)
+//                        bookDataList?.add(item)
+//                        Toast.makeText(context, "전송 성공", Toast.LENGTH_LONG).show()
+//                    }
+//                    override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
+//                        Toast.makeText(context, "전송 실패", Toast.LENGTH_LONG).show()
+//                    }
+//                })
             }
+            bookDataList?.sort()
         }
     }
 }

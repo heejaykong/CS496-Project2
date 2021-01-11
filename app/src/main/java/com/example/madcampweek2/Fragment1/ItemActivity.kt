@@ -13,6 +13,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.example.madcampweek2.R
+import com.example.madcampweek2.RetroFit.RetrofitClient
 import com.example.madcampweek2.VolleyService
 import kotlinx.android.synthetic.main.activity_item.*
 import java.io.ByteArrayOutputStream
@@ -25,6 +26,7 @@ import java.util.ArrayList
 class ItemActivity : AppCompatActivity() {
 
     var position : Int = 0
+    private lateinit var imageData : ByteArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +35,18 @@ class ItemActivity : AppCompatActivity() {
         // 여러 인텐트를 구분하기 위한 result code
         val DELETE_CODE : Int = 2
 
-        // AddActivity의 intent를 받아 저장.
+        // MainActivity의 intent를 받아 저장.
         val intent = getIntent()
         val id = intent.getStringExtra("id")
-        val uri = intent.getStringExtra("photoURI")
+        val url = intent.getStringExtra("url")
         val name = intent.getStringExtra("name")
         val number = intent.getStringExtra("number")
         position = intent.getIntExtra("position", 0)
 
         // hold
-        if (uri != null) {
+        if (url != null) {
             val image = this.findViewById<ImageView>(R.id.image)
-            Glide.with(image).load(uri).circleCrop().into(image)
+            Glide.with(image).load(url).circleCrop().into(image)
         } else {
             Glide.with(image).load(R.drawable.user).circleCrop().into(image)
         }
@@ -58,9 +60,14 @@ class ItemActivity : AppCompatActivity() {
         }
 
         button2.setOnClickListener{
-            val byteArray = VolleyService.uriToByteArray(this@ItemActivity, uri!!.toUri())
-//            val byteArray = "hihi"
-            VolleyService.sendImage(this, byteArray!!)
+//            val Uri = uri?.toUri()
+//            RetrofitClient.instance.uriToByteArray(this, Uri!!)
+//            try {
+//                RetrofitClient.instance.postContactProfile(imageData)
+//            } catch (e : IOException) {
+//                e.printStackTrace()
+//            }
+
         }
 
 
@@ -72,7 +79,7 @@ class ItemActivity : AppCompatActivity() {
             // bundle 객체 생성, contents 저장
             val bundle = Bundle()
             bundle.putString("id", id)
-            bundle.putString("photoURI", uri)
+            bundle.putString("url", url)
             bundle.putString("name", name)
             bundle.putString("number", number)
             bundle.putInt("position", position)
@@ -98,9 +105,12 @@ class ItemActivity : AppCompatActivity() {
         } else {
             val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
 
-            if (bookDataList?.get(resultCode)!!.photoURI != null) {
+            if (bookDataList?.get(resultCode)!!.url != null) {
                 val image = this.findViewById<ImageView>(R.id.image)
-                Glide.with(image).load(bookDataList?.get(resultCode)!!.photoURI).circleCrop().into(image)
+                Glide.with(image).load(bookDataList?.get(resultCode)!!.url).circleCrop().into(image)
+
+
+
             } else {
                 Glide.with(image).load(R.drawable.user).circleCrop().into(image)
             }

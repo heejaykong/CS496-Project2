@@ -22,9 +22,9 @@ class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         // image binding
         val image = view.findViewById<ImageView>(R.id.image)
-        val uri = item.photoURI
-        if (uri != null) {
-            Glide.with(image).load(uri).circleCrop().into(image)
+        val url = item.url
+        if (url != null) {
+            Glide.with(image).load(url).circleCrop().into(image)
         } else {
             Glide.with(image).load(R.drawable.user).circleCrop().into(image)
         }
@@ -66,7 +66,7 @@ class PhoneBookListAdapter(private val mContext: Context, private val itemList: 
             // Bundle을 통해서 전달
             val bundle = Bundle()
             bundle.putString("id", item.id)
-            bundle.putString("photoURI", item.photoURI)
+            bundle.putString("url", item.url)
             bundle.putString("name", item.name)
             bundle.putString("number", item.number)
             bundle.putInt("position", position)
