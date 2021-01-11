@@ -35,7 +35,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
-
 class SplashScreen : AppCompatActivity() {
 
     val callbackManager = CallbackManager.Factory.create()
@@ -101,6 +100,7 @@ class SplashScreen : AppCompatActivity() {
                         // App code
                         startActivity(Intent(this@SplashScreen, MainActivity::class.java))
                         finish()
+
                     }
 
                     override fun onCancel() {}
@@ -234,10 +234,8 @@ class SplashScreen : AppCompatActivity() {
 
     private fun loginVolley(context: Context, url: String, userid: String, password: String) {
         // https://developer.android.com/training/volley/simple GET 방법
-
         // 1. RequestQueue 생성 및 초기화
         val requestQueue = Volley.newRequestQueue(context)
-
         // 2. Request Obejct인 StringRequest 생성
         val request: StringRequest = object : StringRequest(Method.POST, url,
             Response.Listener { response ->
@@ -252,7 +250,7 @@ class SplashScreen : AppCompatActivity() {
                 val params: MutableMap<String, String> = HashMap()
                 params["userid"] = userid
                 params["password"] = password
-                params["mobileNO"] = getPhoneNumber() // 로그인하는 휴대폰번호 정보
+//                params["mobileNO"] = getPhoneNumber() // 로그인하는 휴대폰번호 정보
                 params["uID"] = Settings.Secure.getString(
                     contentResolver,
                     Settings.Secure.ANDROID_ID
@@ -263,7 +261,6 @@ class SplashScreen : AppCompatActivity() {
         // 3) 생성한 StringRequest를 RequestQueue에 추가
         requestQueue.add(request)
     }
-
     fun showJSONList(response: String) {
         try {
             response.let {
@@ -311,7 +308,6 @@ class SplashScreen : AppCompatActivity() {
             }
             return phoneNumber
         }
-
         fun showAlert(title: String, message: String) {
             val builder = context?.let {
                 AlertDialog.Builder(it)
@@ -325,5 +321,3 @@ class SplashScreen : AppCompatActivity() {
         }
     }
 }
-
-
