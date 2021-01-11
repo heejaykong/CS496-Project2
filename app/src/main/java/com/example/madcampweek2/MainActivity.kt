@@ -27,6 +27,8 @@ import org.jetbrains.anko.yesButton
 class MainActivity : AppCompatActivity() {
 //    첫번째탭 관련 권한처리
     private val READ_CONTACTS = Manifest.permission.READ_CONTACTS
+    private val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
+    private val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
     private val CALL_PHONE = Manifest.permission.CALL_PHONE
 
     private val REQ_STORAGE_PERMISSION = 1
@@ -63,8 +65,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 2 -> {
-                    tab.text = "Alcohol"
-                    tab.setIcon(R.drawable.beer)
+                    tab.text = "MEOW"
+                    tab.setIcon(R.drawable.paw)
                 }
                 else -> {
                     tab.text = "Phone Book"

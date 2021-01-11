@@ -1,14 +1,14 @@
-package com.example.madcampweek2.Fragment1
+package com.example.madcampweek2.Fragment3
 
 import android.os.Parcel
 import android.os.Parcelable
 
-class PhoneBookData(
+class PostData(
     var id : String?,
     val photoURI : String?,
     val name: String?,
     val number: String?
-) : Parcelable, Comparable<PhoneBookData> {
+) : Parcelable, Comparable<PostData> {
     constructor(source: Parcel) : this(
         source.readString(),
         source.readString(),
@@ -23,17 +23,17 @@ class PhoneBookData(
         this?.writeString(number)
     }
 
-    companion object CREATOR : Parcelable.Creator<PhoneBookData> {
-        override fun createFromParcel(parcel: Parcel): PhoneBookData {
-            return PhoneBookData(parcel)
+    companion object CREATOR : Parcelable.Creator<PostData> {
+        override fun createFromParcel(parcel: Parcel): PostData {
+            return PostData(parcel)
         }
 
-        override fun newArray(size: Int): Array<PhoneBookData?> {
+        override fun newArray(size: Int): Array<PostData?> {
             return arrayOfNulls(size)
         }
     }
 
-    override fun compareTo(other: PhoneBookData): Int {
+    override fun compareTo(other: PostData): Int {
         return compareValues(this.name, other.name)
     }
 }

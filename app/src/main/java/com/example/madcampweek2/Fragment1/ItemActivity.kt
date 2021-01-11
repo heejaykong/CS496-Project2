@@ -1,14 +1,24 @@
 package com.example.madcampweek2.Fragment1
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.net.toUri
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.example.madcampweek2.R
+import com.example.madcampweek2.VolleyService
 import kotlinx.android.synthetic.main.activity_item.*
+import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.io.InputStream
 import java.util.ArrayList
 
 
@@ -25,6 +35,7 @@ class ItemActivity : AppCompatActivity() {
 
         // AddActivity의 intent를 받아 저장.
         val intent = getIntent()
+        val id = intent.getStringExtra("id")
         val uri = intent.getStringExtra("photoURI")
         val name = intent.getStringExtra("name")
         val number = intent.getStringExtra("number")
@@ -46,6 +57,12 @@ class ItemActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        button2.setOnClickListener{
+            val byteArray = VolleyService.uriToByteArray(this@ItemActivity, uri!!.toUri())
+//            val byteArray = "hihi"
+            VolleyService.sendImage(this, byteArray!!)
+        }
+
 
         edit_button.setOnClickListener{
 
@@ -54,6 +71,7 @@ class ItemActivity : AppCompatActivity() {
 
             // bundle 객체 생성, contents 저장
             val bundle = Bundle()
+            bundle.putString("id", id)
             bundle.putString("photoURI", uri)
             bundle.putString("name", name)
             bundle.putString("number", number)
@@ -65,14 +83,12 @@ class ItemActivity : AppCompatActivity() {
         }
 
         delete_button.setOnClickListener{
-
             val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
             bookDataList?.removeAt(position)
             setResult(DELETE_CODE)
             // 액티비티 종료
-            finish();
+            finish()
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

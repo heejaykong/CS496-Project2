@@ -3,29 +3,29 @@ package com.example.madcampweek2.Fragment1
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Rect
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.example.madcampweek2.MainActivity
 import com.example.madcampweek2.R
-import com.example.madcampweek2.VolleyService
+import com.example.madcampweek2.RetroFit.ApiService
+import com.example.madcampweek2.RetroFit.RetrofitClient
 import kotlinx.android.synthetic.main.activity_add.*
-import kotlinx.android.synthetic.main.activity_add.image
-import kotlinx.android.synthetic.main.activity_edit.*
-import kotlinx.android.synthetic.main.activity_item.*
-import kotlinx.android.synthetic.main.fragment_1.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class AddActivity : AppCompatActivity() {
 
+    lateinit var apiService : ApiService
     private val OPEN_GALLERY = 1
     private var uri : String? = null
 
@@ -36,6 +36,7 @@ class AddActivity : AppCompatActivity() {
         // Request Code
         val ADD_CODE : Int = 0
         val ADD_FAIL : Int = 1
+        apiService = RetrofitClient.instance.apiService
 
         Glide.with(image).load(R.drawable.plus).circleCrop().into(image)
 
@@ -48,8 +49,23 @@ class AddActivity : AppCompatActivity() {
             // PhoneBookDataList에 추가
             val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
             if (name != "" && number !="" && name != null && number != null) {
-                val data: PhoneBookData = PhoneBookData(uri, name, number)
-                VolleyService.postContactVolley(this, data)
+                val data: PhoneBookData = PhoneBookData(null, uri, name, number)
+
+                //send item
+                val contactPostReq: Call<ResponseBody?>? = apiService.contactsPost(name, number)
+                contactPostReq?.enqueue(object : Callback<ResponseBody?> {
+                    override fun onResponse(
+                        call: Call<ResponseBody?>?,
+                        response: Response<ResponseBody?>
+                    ) {
+                        data.id = response.toString()
+                        Toast.makeText(this@AddActivity, "전송 성공", Toast.LENGTH_LONG).show()
+                    }
+                    override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
+                        Toast.makeText(this@AddActivity, "전송 실패", Toast.LENGTH_LONG).show()
+                    }
+                })
+
                 bookDataList?.add(data)
                 Collections.sort(bookDataList)
                 setResult(ADD_CODE)

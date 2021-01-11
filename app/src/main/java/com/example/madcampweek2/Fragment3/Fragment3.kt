@@ -32,16 +32,6 @@ class Fragment3 : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        game1.setOnClickListener {
-            val intent = Intent(context, GameActivity1::class.java)
-            activity?.startActivityForResult(intent, 2)
-        }
-
-        game2.setOnClickListener {
-            val intent = Intent(context, GameActivity2::class.java)
-            activity?.startActivityForResult(intent, 2)
-        }
-
         game3.setOnClickListener {
             Toast.makeText(context, "구현 예정입니다.", Toast.LENGTH_LONG).show()
         }

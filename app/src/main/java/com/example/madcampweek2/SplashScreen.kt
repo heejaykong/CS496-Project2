@@ -18,20 +18,28 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.madcampweek2.RetroFit.RetrofitClient
 import com.facebook.*
+import com.facebook.GraphRequest.newMeRequest
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
+import kotlinx.android.synthetic.main.activity_game4.*
 import kotlinx.android.synthetic.main.activity_splash_screen.*
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.ResponseBody
 import org.json.JSONException
-import java.net.InetAddress
-import java.net.NetworkInterface
+import org.json.JSONObject
 import java.util.*
 
 
 class SplashScreen : AppCompatActivity() {
 
     val callbackManager = CallbackManager.Factory.create()
+    private val REQUEST_PERMISSIONS = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +51,10 @@ class SplashScreen : AppCompatActivity() {
         val accessToken = AccessToken.getCurrentAccessToken()
 
         val accessTokenTracker : AccessTokenTracker = object : AccessTokenTracker() {
-            override fun onCurrentAccessTokenChanged(oldAccessToken : AccessToken,
-                currentAccessToken : AccessToken) {
+            override fun onCurrentAccessTokenChanged(
+                oldAccessToken: AccessToken,
+                currentAccessToken: AccessToken
+            ) {
                 if (currentAccessToken == null) {
                     //write your code here what to do when user logout
                     continue_button.visibility = View.INVISIBLE
@@ -53,6 +63,26 @@ class SplashScreen : AppCompatActivity() {
         }
 
         if (accessToken != null) {
+//            VolleyService.getImage(this, profile, Profile.getCurrentProfile().getProfilePictureUri(50,50).toString())
+//            val requestQueue = Volley.newRequestQueue(context)
+//            val request = GraphRequest(accessToken,  Profile.getCurrentProfile().getProfilePictureUri(50,50).toString())
+            val request = newMeRequest(
+                accessToken,
+                object : GraphRequest.GraphJSONObjectCallback {
+                    override fun onCompleted(
+                        `object`: JSONObject?,
+                        response: GraphResponse?
+                    ) {
+                        // Application code
+                        if (`object` != null) {
+                            profile.profileId = `object`.optString("id")
+                        }
+                    }
+                }).executeAsync()
+
+            profile.visibility = View.VISIBLE
+
+            continue_text.text = "${Profile.getCurrentProfile().firstName}님으로 계속"
             continue_button.visibility = View.VISIBLE
             continue_button.setOnClickListener {
                 // App code
@@ -87,12 +117,96 @@ class SplashScreen : AppCompatActivity() {
 
         }
 
-        button.setOnClickListener {
-            val url : String = address.text.toString()
-            val id : String = id.text.toString()
-            val password : String = password.text.toString()
-            loginVolley(this, url, id, password)
+        get_button.setOnClickListener {
+
+            val contactGetReq = RetrofitClient.instance.apiService.contactsGet(id.text.toString())
+            contactGetReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
+                override fun onResponse(
+                    call: retrofit2.Call<ResponseBody?>?,
+                    response: retrofit2.Response<ResponseBody?>
+                ) {
+                    val test = response.body()!!.string()
+                    val test_ = JSONObject(test).getString("phoneNum")
+                    number.setText(test_)
+                    Toast.makeText(this@SplashScreen, "전송 성공", Toast.LENGTH_LONG).show()
+
+                }
+                override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
+                    Toast.makeText(this@SplashScreen, "전송 실패", Toast.LENGTH_LONG).show()
+                }
+            })
+
         }
+
+        post_button.setOnClickListener {
+            val contactPostReq = RetrofitClient.instance.apiService.contactsPost(
+                name.text.toString(),
+                number.text.toString()
+            )
+            contactPostReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
+                override fun onResponse(
+                    call: retrofit2.Call<ResponseBody?>?,
+                    response: retrofit2.Response<ResponseBody?>
+                ) {
+                    val test = response.body()!!.string()
+                    val test_ = JSONObject(test).getString("_id")
+
+
+                    id.setText(test_)
+                    Toast.makeText(this@SplashScreen, "전송 성공", Toast.LENGTH_LONG).show()
+                }
+                override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
+                    Toast.makeText(this@SplashScreen, "전송 실패", Toast.LENGTH_LONG).show()
+                }
+            })
+
+        }
+
+        delete_button.setOnClickListener {
+            val contactGetReq = RetrofitClient.instance.apiService.contactsDelete(id.text.toString())
+            contactGetReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
+                override fun onResponse(
+                    call: retrofit2.Call<ResponseBody?>?,
+                    response: retrofit2.Response<ResponseBody?>
+                ) {
+                    Toast.makeText(this@SplashScreen, "전송 성공", Toast.LENGTH_LONG).show()
+
+                }
+                override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
+                    Toast.makeText(this@SplashScreen, "전송 실패", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
+
+        put_button.setOnClickListener {
+            val contactPutReq = RetrofitClient.instance.apiService.contactsPut(
+                id.text.toString(),
+                name.text.toString(),
+                number.text.toString()
+            )
+            contactPutReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
+                override fun onResponse(
+                    call: retrofit2.Call<ResponseBody?>?,
+                    response: retrofit2.Response<ResponseBody?>
+                ) {
+                    Toast.makeText(this@SplashScreen, "전송 성공", Toast.LENGTH_LONG).show()
+                }
+                override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
+                    Toast.makeText(this@SplashScreen, "전송 실패", Toast.LENGTH_LONG).show()
+                }
+            })
+
+        }
+    }
+
+    fun removeQuote(text : String) : String {
+        var answer : String = ""
+        text.forEachIndexed { index, item ->
+            if (index != 0 && index != text.length-1) {
+                answer += item
+            }
+        }
+        return answer
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

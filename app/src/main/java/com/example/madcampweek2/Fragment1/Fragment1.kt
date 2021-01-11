@@ -48,9 +48,9 @@ class Fragment1 : Fragment() {
         }
 
         // 초기 연락처 load
-        if (bookDataList!!.isEmpty()) {
-            VolleyService.getContactVolley(context as Activity)
-        }
+//        if (bookDataList!!.isEmpty()) {
+//            VolleyService.getContactVolley(context as Activity)
+//        }
         bookDataList = BookDataList.getInstance()
         phone_book_list.adapter = bookDataList?.let { it ->
             context?.let { it1 ->
@@ -116,9 +116,8 @@ class Fragment1 : Fragment() {
                 val name = cursor?.getString(1)
                 val number = cursor?.getString(2)
                 // 개별 전화번호 데이터 생성
-                val phone = PhoneBookData(photoURI, name, number)
+                val phone = PhoneBookData(null ,photoURI, name, number)
                 // 결과목록에 더하기
-                VolleyService.postContactVolley(context as Activity, phone)
                 list?.add(phone)
             }
         }

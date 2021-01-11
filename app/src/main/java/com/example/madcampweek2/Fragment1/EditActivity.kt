@@ -11,6 +11,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.madcampweek2.R
+import com.example.madcampweek2.SplashScreen.Companion.context
+import com.example.madcampweek2.VolleyService
 import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.activity_edit.*
 import kotlinx.android.synthetic.main.activity_edit.edit_button
@@ -31,6 +33,7 @@ class EditActivity : AppCompatActivity() {
 
         // get Intent
         val inIntent = getIntent()
+        var id = inIntent.getStringExtra("id")
         var name = inIntent.getStringExtra("name")
         var number = inIntent.getStringExtra("number")
         uri = inIntent.getStringExtra("photoURI")
@@ -66,7 +69,7 @@ class EditActivity : AppCompatActivity() {
             // PhoneBookDataList에 추가
             val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
             if (name != "" && number !="" && name != null && number != null) {
-                val data: PhoneBookData = PhoneBookData(uri, name, number)
+                val data: PhoneBookData = PhoneBookData(id, uri, name, number)
                 bookDataList?.set(position, data)
                 Collections.sort(bookDataList)
                 bookDataList?.forEachIndexed{ index, phoneBookData ->

@@ -65,6 +65,7 @@ class PhoneBookListAdapter(private val mContext: Context, private val itemList: 
 
             // Bundle을 통해서 전달
             val bundle = Bundle()
+            bundle.putString("id", item.id)
             bundle.putString("photoURI", item.photoURI)
             bundle.putString("name", item.name)
             bundle.putString("number", item.number)

@@ -3,7 +3,6 @@ package com.example.madcampweek2.Fragment1
 class BookDataList private constructor() {
     companion object {
         @Volatile private var instance: ArrayList<PhoneBookData>? = arrayListOf(
-//            PhoneBookData("김철환","01022591802"),
 //            PhoneBookData("신정윤","01043563523"),
 //            PhoneBookData("심건희","01023523422"),
 //            PhoneBookData("이정인","01063454534"),
