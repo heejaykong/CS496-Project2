@@ -1,25 +1,19 @@
 package com.example.madcampweek2.Fragment3
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.madcampweek2.Fragment1.PostAdapter
 import com.example.madcampweek2.R
+import kotlinx.android.synthetic.main.fragment_1.*
 import kotlinx.android.synthetic.main.fragment_3.*
 
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [Fragment3.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Fragment3 : Fragment() {
+
+    private var postDataList: ArrayList<PostData>? = PostDataList.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +26,10 @@ class Fragment3 : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        postDataList = PostDataList.getInstance()
+        postDataList?.sort()
+        post_list.adapter = context?.let { postDataList?.let {
+                it1 -> PostAdapter(it, it1) } }
+        post_list.layoutManager = LinearLayoutManager(context)
     }
 }

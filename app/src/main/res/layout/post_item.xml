@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -40,7 +39,8 @@
                     android:layout_height="match_parent"
                     android:textSize="24sp"
                     android:layout_weight="1"
-                    android:text="Name" />
+                    android:text="Name"
+                    android:fontFamily="@font/dreamhouseb"/>
 
                 <ImageButton
                     android:id="@+id/etc_button"
@@ -58,8 +58,10 @@
                 android:id="@+id/main_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="24dp"
-                android:text="TextView" />
+                android:layout_margin="10dp"
+                android:textSize="16dp"
+                android:text="TextView"
+                android:fontFamily="@font/dreamhouseb"/>
 
             <ImageView
                 android:id="@+id/main_image"
@@ -67,8 +69,40 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/notme2" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/like_symbol"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30sp"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/heart"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent" />
+
+                <TextView
+                    android:id="@+id/like_number"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:textSize="24dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/dreamhouseb"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
+
+
     </androidx.cardview.widget.CardView>
+
+
+
 
 </LinearLayout>

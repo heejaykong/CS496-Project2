@@ -8,26 +8,13 @@
     tools:context=".Fragment3.Fragment3">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/phone_book_list"
+        android:id="@+id/post_list"
         android:name="com.example.madcampweek2.Fragment1"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:context="com.example.madcampweek2.Fragment1.Fragment1"
-        tools:listitem="@layout/post_item"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/purple_500"
-        app:borderWidth="0dp"
-        app:tint="@android:color/white"
-        app:srcCompat="@android:drawable/ic_input_add"
-        app:layout_scrollFlags="scroll"/>
+        tools:listitem="@layout/post_item" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
