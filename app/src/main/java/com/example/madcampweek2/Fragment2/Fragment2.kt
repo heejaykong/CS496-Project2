@@ -60,7 +60,7 @@ class Fragment2 : Fragment() {
         }
     }
 
-    private val REQUEST_TAKE_PHOTO = 1
+    private val REQUEST_TAKE_PHOTO = 2
     private val REQ_CAMERA_PERMISSION = 100
     private fun takePicture(){
         var permission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)

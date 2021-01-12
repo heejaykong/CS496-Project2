@@ -1,40 +1,35 @@
 package com.example.madcampweek2.Fragment1
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.net.toUri
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.madcampweek2.R
 import com.example.madcampweek2.RetroFit.RetrofitClient
-import com.example.madcampweek2.VolleyService
 import kotlinx.android.synthetic.main.activity_item.*
-import kotlinx.android.synthetic.main.activity_item.delete_button
-import kotlinx.android.synthetic.main.activity_splash_screen.*
 import okhttp3.ResponseBody
-import org.json.JSONObject
-import java.io.ByteArrayOutputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.io.InputStream
-import java.util.ArrayList
+import java.util.*
 
 
 class ItemActivity : AppCompatActivity() {
 
     var position : Int = 0
     private lateinit var imageData : ByteArray
+    private var fab_open: Animation? = null
+    private  var fab_close:Animation? = null
+    private var isFabOpen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
+
+        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
 
         // 여러 인텐트를 구분하기 위한 result code
         val DELETE_CODE : Int = 2
@@ -63,6 +58,10 @@ class ItemActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        fab.setOnClickListener{
+            anim();
+        }
+
         edit_button.setOnClickListener{
 
             // 화면전환 (intent 객체 생성), Edit
@@ -89,16 +88,35 @@ class ItemActivity : AppCompatActivity() {
                     response: retrofit2.Response<ResponseBody?>
                 ) {
                     Toast.makeText(this@ItemActivity, "전송 성공", Toast.LENGTH_LONG).show()
-                    val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
+                    val bookDataList: ArrayList<PhoneBookData>? = BookDataList.getInstance()
                     bookDataList?.removeAt(position)
                     setResult(DELETE_CODE)
                     // 액티비티 종료
                     finish()
                 }
+
                 override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
                     Toast.makeText(this@ItemActivity, "전송 실패", Toast.LENGTH_LONG).show()
                 }
             })
+        }
+    }
+
+
+
+    fun anim() {
+        isFabOpen = if (isFabOpen) {
+            edit_button.startAnimation(fab_close)
+            delete_button.startAnimation(fab_close)
+            edit_button.setClickable(false)
+            delete_button.setClickable(false)
+            false
+        } else {
+            edit_button.startAnimation(fab_open)
+            delete_button.startAnimation(fab_open)
+            edit_button.setClickable(true)
+            delete_button.setClickable(true)
+            true
         }
     }
 

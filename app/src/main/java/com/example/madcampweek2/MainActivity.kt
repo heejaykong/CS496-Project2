@@ -228,11 +228,11 @@ class MainActivity : AppCompatActivity() {
             }
             1-> {
                 mAdapter.fragments[1].onActivityResult(requestCode, resultCode, data)
-                view_pager.adapter = mAdapter
-                view_pager.setCurrentItem(requestCode)
             }
             2-> {
                 mAdapter.fragments[2].onActivityResult(requestCode, resultCode, data)
+                view_pager.adapter = mAdapter
+                view_pager.setCurrentItem(requestCode)
             }
         }
     }

@@ -136,6 +136,7 @@ class Fragment1 : Fragment() {
                         response: retrofit2.Response<ResponseBody?>
                     ) {
                         val test = response.body()!!.string()
+                        print(test)
                         val id = JSONObject(test).getString("_id")
                         val url = JSONObject(test).getString("url")
                         val item : PhoneBookData = PhoneBookData(id, url, name, number)
