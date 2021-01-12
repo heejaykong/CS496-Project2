@@ -18,6 +18,9 @@ import com.example.madcampweek2.R
 import com.example.madcampweek2.RetroFit.ApiService
 import com.example.madcampweek2.RetroFit.RetrofitClient
 import kotlinx.android.synthetic.main.activity_add.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
@@ -54,11 +57,13 @@ class AddActivity : AppCompatActivity() {
             if (name != "" && number !="" && name != null && number != null) {
 
                 // 서버에 연락처 정보 전송
-                val contactPostReq = RetrofitClient.instance.apiService.contactsPost(
-                    name,
-                    number,
-                    RetrofitClient.instance.uriToByteArrayBody(this, uri?.toUri())
-                )
+                var body : MultipartBody.Part? = null
+                val imageData = RetrofitClient.instance.uriToByteArrayBody(this, uri?.toUri())
+                if (imageData != null) {
+                    val reqfile: RequestBody = RequestBody.create(MediaType.parse("image/*"), imageData)
+                    body = MultipartBody.Part.createFormData("upload", "abc", reqfile)
+                }
+                val contactPostReq = RetrofitClient.instance.apiService.contactsPost(name, number, body)
                 contactPostReq?.enqueue(object : Callback<ResponseBody?> {
                     override fun onResponse(
                         call: Call<ResponseBody?>?,

@@ -183,6 +183,7 @@ class SplashScreen : AppCompatActivity() {
                 id.text.toString(),
                 name.text.toString(),
                 number.text.toString(),
+                id.text.toString(),
                 null
             )
             contactPutReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {

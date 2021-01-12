@@ -20,6 +20,9 @@ import com.example.madcampweek2.*
 import com.example.madcampweek2.RetroFit.RetrofitClient
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import kotlinx.android.synthetic.main.fragment_1.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import java.util.*
@@ -118,32 +121,30 @@ class Fragment1 : Fragment() {
                 val name = cursor?.getString(1)
                 val number = cursor?.getString(2)
 
-                bookDataList?.add(PhoneBookData(null, photoURI, name, number))
-
-//                // 서버에 연락처 정보 전송
-//                val contactPostReq = RetrofitClient.instance.apiService.contactsPost(
-//                    name,
-//                    number,
-//                    RetrofitClient.instance.uriToByteArrayBody(requireContext(), photoURI?.toUri())
-//                )
-//                contactPostReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
-//                    override fun onResponse(
-//                        call: retrofit2.Call<ResponseBody?>?,
-//                        response: retrofit2.Response<ResponseBody?>
-//                    ) {
-//                        val test = response.body()!!.string()
-//                        val test_ = JSONObject(test).getString("_id")
-//                        val url = JSONObject(test).getString("url")
-//                        val item : PhoneBookData = PhoneBookData(test_, url, name, number)
-//                        bookDataList?.add(item)
-//                        Toast.makeText(context, "전송 성공", Toast.LENGTH_LONG).show()
-//                    }
-//                    override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
-//                        Toast.makeText(context, "전송 실패", Toast.LENGTH_LONG).show()
-//                    }
-//                })
+                //이미지 전송을 위한 준비작업
+                var body : MultipartBody.Part? = null
+                val imageData = RetrofitClient.instance.uriToByteArrayBody(requireContext(), photoURI?.toUri())
+                if (imageData != null) {
+                    val reqfile: RequestBody = RequestBody.create(MediaType.parse("image/*"), imageData)
+                    body = MultipartBody.Part.createFormData("upload", "abc", reqfile)
+                }
+                // 서버에 연락처 정보 전송
+                val contactPostReq = RetrofitClient.instance.apiService.contactsPost(name, number, body)
+                contactPostReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
+                    override fun onResponse(
+                        call: retrofit2.Call<ResponseBody?>?,
+                        response: retrofit2.Response<ResponseBody?>
+                    ) {
+                        val test = response.body()!!.string()
+                        val id = JSONObject(test).getString("_id")
+                        val url = JSONObject(test).getString("url")
+                        val item : PhoneBookData = PhoneBookData(id, url, name, number)
+                        bookDataList?.add(item)
+                        bookDataList?.sort()
+                    }
+                    override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {}
+                })
             }
-            bookDataList?.sort()
         }
     }
 }

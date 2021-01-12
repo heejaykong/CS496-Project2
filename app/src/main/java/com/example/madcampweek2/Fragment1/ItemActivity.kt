@@ -16,6 +16,10 @@ import com.example.madcampweek2.R
 import com.example.madcampweek2.RetroFit.RetrofitClient
 import com.example.madcampweek2.VolleyService
 import kotlinx.android.synthetic.main.activity_item.*
+import kotlinx.android.synthetic.main.activity_item.delete_button
+import kotlinx.android.synthetic.main.activity_splash_screen.*
+import okhttp3.ResponseBody
+import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -59,18 +63,6 @@ class ItemActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        button2.setOnClickListener{
-//            val Uri = uri?.toUri()
-//            RetrofitClient.instance.uriToByteArray(this, Uri!!)
-//            try {
-//                RetrofitClient.instance.postContactProfile(imageData)
-//            } catch (e : IOException) {
-//                e.printStackTrace()
-//            }
-
-        }
-
-
         edit_button.setOnClickListener{
 
             // 화면전환 (intent 객체 생성), Edit
@@ -90,11 +82,23 @@ class ItemActivity : AppCompatActivity() {
         }
 
         delete_button.setOnClickListener{
-            val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
-            bookDataList?.removeAt(position)
-            setResult(DELETE_CODE)
-            // 액티비티 종료
-            finish()
+            val contactDeleteReq = RetrofitClient.instance.apiService.contactsDelete(id)
+            contactDeleteReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
+                override fun onResponse(
+                    call: retrofit2.Call<ResponseBody?>?,
+                    response: retrofit2.Response<ResponseBody?>
+                ) {
+                    Toast.makeText(this@ItemActivity, "전송 성공", Toast.LENGTH_LONG).show()
+                    val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
+                    bookDataList?.removeAt(position)
+                    setResult(DELETE_CODE)
+                    // 액티비티 종료
+                    finish()
+                }
+                override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
+                    Toast.makeText(this@ItemActivity, "전송 실패", Toast.LENGTH_LONG).show()
+                }
+            })
         }
     }
 
@@ -108,9 +112,6 @@ class ItemActivity : AppCompatActivity() {
             if (bookDataList?.get(resultCode)!!.url != null) {
                 val image = this.findViewById<ImageView>(R.id.image)
                 Glide.with(image).load(bookDataList?.get(resultCode)!!.url).circleCrop().into(image)
-
-
-
             } else {
                 Glide.with(image).load(R.drawable.user).circleCrop().into(image)
             }

@@ -50,8 +50,7 @@ class RetrofitClient private constructor() {
             }
         })
     }
-    fun uriToByteArrayBody (context : Context, uri : Uri?) : MultipartBody.Part? {
-        var imageData : ByteArray
+    fun uriToByteArrayBody (context : Context, uri : Uri?) : ByteArray? {
         if (uri == null) {
             return null
         }
@@ -64,10 +63,9 @@ class RetrofitClient private constructor() {
             while (inputStream!!.read(buffer).apply{len = this} != -1) {
                 byteArrayOutputStream.write(buffer, 0, len);
             }
-            imageData = byteArrayOutputStream.toByteArray()
-            val reqfile: RequestBody = RequestBody.create(MediaType.parse("image/*"), imageData)
-            val body = MultipartBody.Part.createFormData("upload", "abc", reqfile)
-            return body
+            val imageData = byteArrayOutputStream.toByteArray()
+
+            return imageData
 
         } catch (e : FileNotFoundException) {
             e.printStackTrace();
@@ -88,6 +86,7 @@ interface ApiService {
         @Path("id") id: String?
     ) : Call<ResponseBody?>?
 
+    @Multipart
     @POST("/contacts/post/{name}/{phoneNum}")
     fun contactsPost(
         @Path("name") name: String?,
@@ -95,11 +94,13 @@ interface ApiService {
         @Part image : MultipartBody.Part?
     ): Call<ResponseBody?>?
 
-    @PUT("/contacts/put/{id}/{name}/{phoneNum}")
+    @Multipart
+    @PUT("/contacts/put/{id}/{name}/{phoneNum}/{url}")
     fun contactsPut(
         @Path("id") id: String?,
         @Path("name") name: String?,
         @Path("phoneNum") phoneNum: String?,
+        @Path("url") url: String?,
         @Part image : MultipartBody.Part?
     ): Call<ResponseBody?>?
 

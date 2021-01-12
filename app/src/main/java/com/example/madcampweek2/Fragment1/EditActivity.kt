@@ -9,21 +9,32 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.example.madcampweek2.R
+import com.example.madcampweek2.RetroFit.RetrofitClient
 import com.example.madcampweek2.VolleyService
 import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.activity_edit.*
 import kotlinx.android.synthetic.main.activity_edit.edit_button
 import kotlinx.android.synthetic.main.activity_edit.image
 import kotlinx.android.synthetic.main.activity_item.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
 
 class EditActivity : AppCompatActivity() {
 
     private val OPEN_GALLERY = 1
-    private var url : String? = null
+    private var uri : String? = null
     private var position = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +46,7 @@ class EditActivity : AppCompatActivity() {
         var id = inIntent.getStringExtra("id")
         var name = inIntent.getStringExtra("name")
         var number = inIntent.getStringExtra("number")
-        url = inIntent.getStringExtra("url")
+        var url = inIntent.getStringExtra("url")
         position = inIntent.getIntExtra("position", 0)
 
         // set initial view
@@ -68,20 +79,47 @@ class EditActivity : AppCompatActivity() {
             // PhoneBookDataList에 추가
             val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
             if (name != "" && number !="" && name != null && number != null) {
-                val data: PhoneBookData = PhoneBookData(id, url, name, number)
-                bookDataList?.set(position, data)
-                Collections.sort(bookDataList)
-                bookDataList?.forEachIndexed{ index, phoneBookData ->
-                    if (phoneBookData.equals(data)) {
-                        setResult(index)
+
+                // 서버에 연락처 정보 전송
+                var body: MultipartBody.Part? = null
+                if (uri != null) {
+                    val imageData = RetrofitClient.instance.uriToByteArrayBody(this, uri?.toUri())
+                    if (imageData != null) {
+                        val reqfile: RequestBody =
+                            RequestBody.create(MediaType.parse("image/*"), imageData)
+                        body = MultipartBody.Part.createFormData("upload", "abc", reqfile)
                     }
                 }
+                val contactPutReq = RetrofitClient.instance.apiService.contactsPut(id, name, number, url, body)
+                contactPutReq?.enqueue(object : Callback<ResponseBody?> {
+                    override fun onResponse(
+                        call: Call<ResponseBody?>?,
+                        response: Response<ResponseBody?>
+                    ) {
+                        val test = response.body()!!.string()
+                        val test_ = JSONObject(test).getString("url")
+                        val item : PhoneBookData = PhoneBookData(id, test_, name, number)
+                        bookDataList?.set(position, item)
+                        bookDataList?.sort()
+                        bookDataList?.forEachIndexed{ index, phoneBookData ->
+                            if (phoneBookData.equals(item)) {
+                                setResult(index)
+                            }
+                        }
+                        Toast.makeText(this@EditActivity, "전송 성공", Toast.LENGTH_LONG).show()
+
+
+                        // 액티비티 종료
+                        finish();
+                    }
+                    override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
+                        Toast.makeText(this@EditActivity, "전송 실패", Toast.LENGTH_LONG).show()
+                    }
+                })
             }
             else {
                 setResult(EDIT_FAIL)
             }
-            // 액티비티 종료
-            finish();
         }
     }
 
@@ -106,10 +144,10 @@ class EditActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == OPEN_GALLERY) {
-                url = data?.data.toString()
-                if (url != null) {
+                uri = data?.data.toString()
+                if (uri != null) {
                     val image = this.findViewById<ImageView>(R.id.image)
-                    Glide.with(image).load(url).circleCrop().into(image)
+                    Glide.with(image).load(uri).circleCrop().into(image)
                 } else {
                     Glide.with(image).load(R.drawable.plus).circleCrop().into(image)
                 }

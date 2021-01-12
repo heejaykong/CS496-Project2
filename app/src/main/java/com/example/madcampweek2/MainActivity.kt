@@ -55,21 +55,21 @@ class MainActivity : AppCompatActivity() {
         checkPhonebookPermissionAndStart()
 
         // DB에서 연락처 받아오기
-//        val contactGetReq = RetrofitClient.instance.apiService.contactsGetAll()
-//        contactGetReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
-//            override fun onResponse(
-//                call: retrofit2.Call<ResponseBody?>?,
-//                response: retrofit2.Response<ResponseBody?>
-//            ) {
-//                val test = response.body()!!.string()
-//                addContactsList(test)
-//                Toast.makeText(this@MainActivity, "전송 성공", Toast.LENGTH_LONG).show()
-//
-//            }
-//            override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
-//                Toast.makeText(this@MainActivity, "전송 실패", Toast.LENGTH_LONG).show()
-//            }
-//        })
+        val contactGetReq = RetrofitClient.instance.apiService.contactsGetAll()
+        contactGetReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
+            override fun onResponse(
+                call: retrofit2.Call<ResponseBody?>?,
+                response: retrofit2.Response<ResponseBody?>
+            ) {
+                val test = response.body()!!.string()
+                addContactsList(test)
+                Toast.makeText(this@MainActivity, "전송 성공", Toast.LENGTH_LONG).show()
+
+            }
+            override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "전송 실패", Toast.LENGTH_LONG).show()
+            }
+        })
 
         // 뷰페이저 설정
         val fragmentList = listOf(Fragment1(), Fragment3(), Fragment2())

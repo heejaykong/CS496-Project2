@@ -25,6 +25,7 @@ class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val url = item.url
         if (url != null) {
             Glide.with(image).load(url).circleCrop().into(image)
+            print(url)
         } else {
             Glide.with(image).load(R.drawable.user).circleCrop().into(image)
         }
