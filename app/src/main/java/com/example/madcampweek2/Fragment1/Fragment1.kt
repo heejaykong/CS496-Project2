@@ -59,6 +59,7 @@ class Fragment1 : Fragment() {
         }
 
         bookDataList = BookDataList.getInstance()
+        bookDataList?.sort()
         phone_book_list.adapter = bookDataList?.let { it ->
             context?.let { it1 ->
                 PhoneBookListAdapter(it1, it)

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.madcampweek2.R
 import kotlinx.android.synthetic.main.phonebook_item.view.*
-import org.jetbrains.anko.backgroundColor
 
 class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     var view : View = v
