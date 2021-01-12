@@ -13,8 +13,11 @@ import android.telephony.PhoneNumberUtils
 import android.telephony.TelephonyManager
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.annotation.UiThread
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -32,6 +35,7 @@ import kotlinx.android.synthetic.main.activity_splash_screen.*
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.ResponseBody
+import org.jetbrains.anko.startActivity
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -96,7 +100,6 @@ class SplashScreen : AppCompatActivity() {
             LoginManager.getInstance().registerCallback(callbackManager,
                 object : FacebookCallback<LoginResult?> {
 
-
                     override fun onSuccess(loginResult: LoginResult?) {
                         // App code
                         startActivity(Intent(this@SplashScreen, MainActivity::class.java))
@@ -112,92 +115,6 @@ class SplashScreen : AppCompatActivity() {
                         ).show()
                     }
                 })
-
-        }
-
-        get_button.setOnClickListener {
-
-            val contactGetReq = RetrofitClient.instance.apiService.contactsGet(id.text.toString())
-            contactGetReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
-                override fun onResponse(
-                    call: retrofit2.Call<ResponseBody?>?,
-                    response: retrofit2.Response<ResponseBody?>
-                ) {
-                    val test = response.body()!!.string()
-                    val test_ = JSONObject(test).getString("phoneNum")
-                    number.setText(test_)
-                    Toast.makeText(this@SplashScreen, "전송 성공", Toast.LENGTH_LONG).show()
-
-                }
-                override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
-                    Toast.makeText(this@SplashScreen, "전송 실패", Toast.LENGTH_LONG).show()
-                }
-            })
-
-        }
-
-        post_button.setOnClickListener {
-            val contactPostReq = RetrofitClient.instance.apiService.contactsPost(
-                name.text.toString(),
-                number.text.toString(),
-                null
-            )
-            contactPostReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
-                override fun onResponse(
-                    call: retrofit2.Call<ResponseBody?>?,
-                    response: retrofit2.Response<ResponseBody?>
-                ) {
-                    val test = response.body()!!.string()
-                    val test_ = JSONObject(test).getString("_id")
-
-
-                    id.setText(test_)
-                    Toast.makeText(this@SplashScreen, "전송 성공", Toast.LENGTH_LONG).show()
-                }
-                override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
-                    Toast.makeText(this@SplashScreen, "전송 실패", Toast.LENGTH_LONG).show()
-                }
-            })
-
-        }
-
-        delete_button.setOnClickListener {
-            val contactGetReq = RetrofitClient.instance.apiService.contactsDelete(id.text.toString())
-            contactGetReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
-                override fun onResponse(
-                    call: retrofit2.Call<ResponseBody?>?,
-                    response: retrofit2.Response<ResponseBody?>
-                ) {
-                    Toast.makeText(this@SplashScreen, "전송 성공", Toast.LENGTH_LONG).show()
-
-                }
-                override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
-                    Toast.makeText(this@SplashScreen, "전송 실패", Toast.LENGTH_LONG).show()
-                }
-            })
-        }
-
-        put_button.setOnClickListener {
-
-            val contactPutReq = RetrofitClient.instance.apiService.contactsPut(
-                id.text.toString(),
-                name.text.toString(),
-                number.text.toString(),
-                id.text.toString(),
-                null
-            )
-            contactPutReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
-                override fun onResponse(
-                    call: retrofit2.Call<ResponseBody?>?,
-                    response: retrofit2.Response<ResponseBody?>
-                ) {
-                    Toast.makeText(this@SplashScreen, "전송 성공", Toast.LENGTH_LONG).show()
-                }
-                override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
-                    Toast.makeText(this@SplashScreen, "전송 실패", Toast.LENGTH_LONG).show()
-                }
-            })
-
         }
     }
 
