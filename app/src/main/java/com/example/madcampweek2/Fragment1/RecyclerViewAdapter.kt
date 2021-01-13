@@ -33,7 +33,7 @@ class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     }
 }
 
-class PhoneBookListAdapter(private val mContext: Context, private val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
+class PhoneBookListAdapter(private val mContext: Context, private val itemList: ArrayList<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
     override fun getItemCount() = itemList.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneBookViewHolder {
         val inflatedView = LayoutInflater.from(parent.context).inflate(

@@ -29,9 +29,9 @@ class PostViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val image = view.findViewById<ImageView>(R.id.main_image)
         val imageUrl = item.photoUrl
         if (imageUrl != null) {
-            Glide.with(view).load(imageUrl).circleCrop().into(image)
+            Glide.with(view).load(imageUrl).into(image)
         } else {
-            Glide.with(view).load(R.drawable.user).circleCrop().into(image)
+            Glide.with(view).load(R.drawable.user).into(image)
         }
         //Fill color on Like symbol
         if (item.isMe) {

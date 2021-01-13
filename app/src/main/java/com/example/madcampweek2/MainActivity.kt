@@ -30,6 +30,7 @@ import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 //    첫번째탭 관련 권한처리
@@ -54,6 +55,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         checkPhonebookPermissionAndStart()
 
+        // 연락처 초기화
+        BookDataList.getInstance()?.clear()
+
         // DB에서 연락처 받아오기
         val contactGetReq = RetrofitClient.instance.apiService.contactsGetAll()
         contactGetReq?.enqueue(object : retrofit2.Callback<ResponseBody?> {
@@ -63,12 +67,9 @@ class MainActivity : AppCompatActivity() {
             ) {
                 val test = response.body()!!.string()
                 addContactsList(test)
-                Toast.makeText(this@MainActivity, "전송 성공", Toast.LENGTH_LONG).show()
 
             }
-            override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "전송 실패", Toast.LENGTH_LONG).show()
-            }
+            override fun onFailure(call: retrofit2.Call<ResponseBody?>, t: Throwable) {}
         })
 
         // 뷰페이저 설정
