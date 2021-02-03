@@ -1,6 +1,6 @@
 # Kotlin으로 안드로이드 앱 만들어 보기2
 
-## Mad Camp(2020-winter) 둘째 주 프로젝트
+#### Mad Camp(2020-winter) 둘째 주 프로젝트
 
 **서버:** https://github.com/heejaykong/mad-camp-week2-server
 
@@ -9,6 +9,8 @@
 Meow(야옹)
 
 ### 2. 기능 설명
+
+#### 요약: Kotlin, Node.js, MongoDB를 사용해 탭 별로 전화번호부, SNS 피드, 사진첩을 구현한 애플리케이션
 
 **[전체]**
 
